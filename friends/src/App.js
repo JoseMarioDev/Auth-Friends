@@ -5,25 +5,30 @@ import Login from './components/Login';
 import Homepage from './components/Homepage';
 
 function App() {
+  const PrivateRoute = ({ component: Homepage, ...rest }) => (
+    <Route
+      {...rest}
+      render={props =>
+        localStorage.getItem('token') ? (
+          <Homepage {...props} />
+        ) : (
+          <Redirect to='/login' />
+        )
+      }
+    />
+  );
   return (
     <div className='App'>
       <div>
-        <Link to='/'>Login</Link>
-        <Link to='/Homepage'>Homepage</Link>
+        <p>
+          <Link to='/'>Login</Link>
+        </p>
+        <p>
+          <Link to='/Homepage'>Homepage</Link>
+        </p>
       </div>
       <Route exact path='/' component={Login} />
-      <Route
-        exact
-        path='/Homepage'
-        render={props => {
-          const token = localStorage.getItem('token');
-
-          if (!token) {
-            return <Redirect to='/' />;
-          }
-          return <Homepage {...props} />;
-        }}
-      />
+      <PrivateRoute exact path='/Homepage' component={Homepage} />
     </div>
   );
 }

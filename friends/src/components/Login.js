@@ -53,8 +53,9 @@ export default withFormik({
     axios
       .post(url, values)
       .then(response => {
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data.payload);
         formikBag.props.history.push('/Homepage');
+        formikBag.resetForm();
       })
       .catch(e => {
         console.log(e.response.data);
